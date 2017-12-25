@@ -12,3 +12,11 @@
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
+debug
+resources/resources.go
+.vscode/launch.json
+.vs/slnx.sqlite
+.vs/config/applicationhost.config
+.vs/VSWorkspaceState.json
+.vs/ProjectSettings.json
+.vs/Matcha/v15/.suo

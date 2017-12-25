@@ -1,0 +1,28 @@
+name: FindFailedEvent
+
+
+variables: 
+  STATE: 4
+  STATENAME: Failed
+  MESSAGETYPE: Transaction
+  PUBLISHED: 6
+  PROCESSING: 2
+  SUBSUCCEED: Succeed
+  LOCKED: FOR UPDATE SKIP LOCKED 
+
+script:
+  UPDATE "public"."matcha.messages" 
+  SET "State" = ${STATE} AND "StateName"='${STATENAME}'
+  WHERE
+	  "ID" = (
+        SELECT "m"."ID" 
+        FROM "${SCHEMA}"."matcha.messages" AS "m"
+	      INNER JOIN "${SCHEMA}"."matcha.subscriptions" AS sub ON "m"."ID" = "sub"."MessageID" 
+        WHERE
+	        ("m"."State" = ${PUBLISHED} OR "m"."State" = ${PROCESSING}) 
+	        AND "m"."MessageType" = '${MESSAGETYPE}' 
+	        AND (
+	        "sub"."StateName" = 'Failed' 
+	        OR ("sub"."StateName" <> '${SUBSUCCEED}' AND "sub"."LastMotifyTime" < $1 )) 
+	        LIMIT 1 ${LOCKED}
+	) RETURNING *

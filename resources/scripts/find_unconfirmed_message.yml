@@ -1,0 +1,18 @@
+name: FindUnConfirmedMessage
+
+script:
+  SELECT
+	  "${SCHEMA}"."matcha.messages"."ID",
+	  "${SCHEMA}"."matcha.messages"."State",
+	  "${SCHEMA}"."matcha.messages"."StateName",
+    "${SCHEMA}"."matcha.messages"."Publisher",
+	  "${SCHEMA}"."matcha.messages"."PublishTime",
+	  "${SCHEMA}"."matcha.messages"."PublishTimeString" 
+  FROM
+	  "${SCHEMA}"."matcha.messages" 
+  WHERE
+	  "${SCHEMA}"."matcha.messages"."State" = 6 
+	  AND "${SCHEMA}"."matcha.messages"."StateName" = 'Published' 
+    AND "${SCHEMA}"."matcha.messages"."Publisher" IS NOT NULL 
+    AND "${SCHEMA}"."matcha.messages"."Publisher" <> ''
+	  AND "${SCHEMA}"."matcha.messages"."PublishTime" <= $1

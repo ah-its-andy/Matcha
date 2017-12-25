@@ -1,0 +1,21 @@
+{
+  "name": "matcha",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {    
+    "embed":"go run ./resources/binder/main.go",
+    "prebuild":"npm run embed",
+    "build": "go build ./... && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/standardcore/matchaGO.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/standardcore/matchaGO/issues"
+  },
+  "homepage": "https://github.com/standardcore/matchaGO#readme"
+}

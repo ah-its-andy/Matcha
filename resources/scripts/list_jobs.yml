@@ -1,0 +1,31 @@
+name: ListJobs
+
+script:
+  SELECT
+	  msg."ID",
+	  msg."StateName",
+	  msg."CreationTimeString",
+	  msg."Publisher",
+	  msg."PublishTime",
+	  job."Expression",
+	  job."KindName",
+	  job."DelaySeconds",
+	  sub."ID" AS "SubID",
+	  sub."Exchange",
+	  sub."RouteKey",
+	  sub."StateName" AS "Stage",
+	  sub."LastMotifyTimeString" AS "StageTime",
+	  flow."ID" AS "FlowID",
+	  flow."StateName" AS "FlowState",
+	  flow."Remark",
+	  flow."CreationTimeString" AS "FlowTime" 
+  FROM
+	  "${SCHEMA}"."matcha.messages" AS msg
+	  INNER JOIN 
+      "${SCHEMA}"."matcha.jobs" AS job ON msg."ID" = job."MessageID"
+	  INNER JOIN 
+      "${SCHEMA}"."matcha.subscriptions" AS sub ON msg."ID" = sub."MessageID"
+	  INNER JOIN 
+      "${SCHEMA}"."matcha.flows" AS flow ON sub."ID" = flow."SubscriptionID" 
+  WHERE
+	  msg."MessageType" = 'BackgroudJob'

@@ -1,0 +1,91 @@
+· MENU
+    * 基本类型
+    * 事件消息查询接口
+    * 后台任务查询接口
+    * 消息内容查询接口
+
+· 基本类型：
+    消息状态：
+        Scheduled 等待处理
+        Processing 处理中
+        Succeeded 成功
+        Failed 失败
+        Unknown 未知状态
+        Rollback 已回滚
+    
+
+· 事件消息查询接口
+    请求地址：/v1/api/listevents
+    请求方法：POST
+    请求参数：
+        start   int64   消息发布时间筛选范围开始时间的unix时间戳， 可以为空，必须成对出现
+        end   int64   消息发布时间筛选范围结束时间的unix时间戳， 可以为空，必须成对出现
+        state   string  【消息状态】,可以为空
+        pager   bool    是否分页,默认false
+        skip    int32   分页选项
+        take    int32   分页选项
+    返回值(集合):
+        message_id      string  消息ID
+        exchange        string  消息发送到的交换机
+        key             string  路由KEY
+        target_client   string  目标投递对象
+        state           string  【消息状态】
+        publisher       string  发布者
+        publish_time    string  发布时间
+        subs            list    订阅者
+            ___________________
+            |   sub_id              string  订阅ID
+            |   tag                 string  订阅者标签
+            |   state               string  订阅状态
+            |   last_motify_time    string  最后一次修改时间
+            |   flows               list    状态流
+                ___________________
+                |   flow_id         string  
+                |   state           string  状态
+                |   remark          string  备注
+                |   creation_time   string  创建时间
+
+        Logs            list     【消息状态】日志
+            ___________________
+            |   log_id          string  
+            |   orignal         string  原始状态
+            |   current         string  当前状态
+            |   creation_time   string  日志记录时间
+
+· 后台任务查询接口
+    请求地址：/v1/api/listjobs
+    请求方法：POST
+    请求参数：
+        start   int64   消息发布时间筛选范围开始时间的unix时间戳， 可以为空，必须成对出现
+        end   int64   消息发布时间筛选范围结束时间的unix时间戳， 可以为空，必须成对出现
+        state   string  【消息状态】,可以为空
+        pager   bool    是否分页,默认false
+        skip    int32   分页选项
+        take    int32   分页选项
+    返回值(list):
+        id              string  消息ID
+        state           string  【消息状态】
+        creation_time   string  创建时间
+        publisher       string  发布者
+        publish_time    string  发布时间
+        expression      string  表达式
+        delay           int32   延时时间（秒）
+        sub_id          string  订阅ID
+        exchange        string  订阅交换机
+        key             string  订阅路由KEY
+        stage           string  任务阶段
+        stage_time      string  阶段更新时间
+        flows           list    状态流
+            ___________________
+            |   id              string  
+            |   state           string  状态
+            |   remark          string  备注
+            |   creation_time   string  创建时间
+
+· 消息内容查询接口
+    请求地址：/v1/api/listevents
+    请求方法：GET
+    请求参数：
+        id  string  要查询的消息ID
+    返回值(plain/text): 
+        消息的内容文本

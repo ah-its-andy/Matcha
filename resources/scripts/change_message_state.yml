@@ -1,0 +1,10 @@
+name: ChangeMessageState
+
+script:
+  UPDATE 
+    "${SCHEMA}"."matcha.messages" 
+  SET 
+    "State" = $1, 
+    "StateName" = $2
+  WHERE 
+    "ID" = $3;

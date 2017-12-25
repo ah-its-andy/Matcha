@@ -1,0 +1,22 @@
+name: FindOneLockedMessage
+
+script:
+  SELECT
+    "ID", 
+    "MessageType", 
+    "Content", 
+    "State", 
+    "StateName", 
+    "Retry", 
+    "CreationTime", 
+    "CreationTimeString", 
+    "Publisher", 
+    "PublishTime", 
+    "PublishTimeString", 
+    "Env"
+  FROM 
+    "${SCHEMA}"."matcha.messages"
+  WHERE
+    "${SCHEMA}"."matcha.messages"."ID"=$1
+  FOR UPDATE SKIP LOCKED
+    

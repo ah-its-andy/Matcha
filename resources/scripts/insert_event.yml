@@ -1,0 +1,16 @@
+name: InsertEvent
+
+script:
+  INSERT INTO "${SCHEMA}"."matcha.events"(
+    "ID", 
+    "MessageID", 
+    "Exchange", 
+    "RouteKey",
+    "Queue"
+  ) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5
+  );

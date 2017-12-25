@@ -1,0 +1,16 @@
+name: FetchFlows
+
+script:
+  SELECT
+    "ID", 
+    "SubscriptionID", 
+    "StateName", 
+    "Remark", 
+    "CreationTime", 
+    "CreationTimeString"
+  FROM
+    "${SCHEMA}"."matcha.flows"
+  WHERE
+    "${SCHEMA}"."matcha.flows"."SubscriptionID"=$1
+  ORDER BY
+    "${SCHEMA}"."matcha.flows"."CreationTime" ASC

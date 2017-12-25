@@ -1,0 +1,18 @@
+name: InsertSubscription
+
+script:
+  INSERT INTO "${SCHEMA}"."matcha.subscriptions"(
+    "ID", 
+    "MessageID", 
+    "ReceiverTag", 
+    "Exchange", 
+    "RouteKey",
+    "StateName"
+  ) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6
+  );

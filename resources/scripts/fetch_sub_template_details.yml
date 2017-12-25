@@ -1,0 +1,15 @@
+name: FetchSubTemplateDetails
+
+script:
+  SELECT
+	  "ID",
+	  "TemplateID",
+	  "ReceiverTag",
+	  "Exchange",
+	  "RouteKey",
+	  "CreationTime",
+	  "CreationTimeString" 
+  FROM
+	  "${SCHEMA}"."matcha.sub_template_details" 
+  WHERE
+	  "TemplateID" = $1

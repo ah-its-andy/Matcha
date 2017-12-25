@@ -1,0 +1,16 @@
+name: FindProcessingMessage
+
+variables: 
+  STATE: 2
+  STATENAME: Processing
+
+script:
+    SELECT
+      msg."ID"
+    FROM
+      "${SCHEMA}"."matcha.messages" AS "msg"
+    WHERE
+      msg."State"=${STATE}
+      AND msg."StateName"='${STATENAME}' 
+    ORDER BY
+      msg."ID" ASC

@@ -1,0 +1,10 @@
+name: PublishedMessage
+
+script: 
+  UPDATE "${SCHEMA}"."matcha.messages" 
+  SET "State" = $1,
+    "StateName" = $2,
+    "PublishTime" = $3,
+    "PublishTimeString" = $4 
+  WHERE
+	  "ID" = $5;

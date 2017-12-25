@@ -1,0 +1,13 @@
+name: FindOneTemplate
+
+script:
+  SELECT
+	  "ID",
+	  "Name",
+	  "Description",
+	  "CreationTime",
+	  "CreationTimeString" 
+  FROM
+	  "${SCHEMA}"."matcha.sub_templates"
+  WHERE
+	  "ID"=$1 OR "Name"=$2

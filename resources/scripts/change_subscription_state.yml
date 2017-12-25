@@ -1,0 +1,14 @@
+name: ChangeSubscriptionState
+
+script:
+  UPDATE 
+    "${SCHEMA}"."matcha.subscriptions" 
+  SET 
+    "StateName" = $1, 
+    "LastMotifyTime" = $2, 
+    "LastMotifyTimeString" = $3
+  WHERE 
+    (("ID" = $4) 
+    OR 
+    ("MessageID" = $5 AND "ReceiverTag"=$6))
+    AND ("StateName" != 'Failed');

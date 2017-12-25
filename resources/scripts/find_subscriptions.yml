@@ -1,0 +1,16 @@
+name: FindSubscription
+
+script:
+  SELECT 
+    "ID", 
+    "MessageID", 
+    "ReceiverTag", 
+    "Exchange", 
+    "RouteKey", 
+    "StateName"
+  FROM 
+    "${SCHEMA}"."matcha.subscriptions"
+  WHERE
+    ("ID" = $1) 
+    OR 
+    ("MessageID" = $2 AND "ReceiverTag"=$3);

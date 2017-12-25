@@ -1,0 +1,35 @@
+name: ListEvents
+
+script:
+  SELECT
+    msg."ID" AS "MessageID",
+    msg."StateName" AS "MessageState",
+    msg."Publisher",
+    msg."PublishTimeString",
+    eve."RouteKey",
+    eve."Queue",
+    eve."Exchange",
+    log."ID" AS "LogID",
+    log."OrignalStateName" AS "LogOrignal",
+    log."StateName" AS "LogCurrent",
+    log."CreationTimeString" AS "LogTime",
+    sub."ID" AS "SubID",
+    sub."ReceiverTag",
+    sub."StateName" AS "SubState",
+    sub."LastMotifyTimeString" AS "SubTime",
+    flow."ID" AS "FlowID",
+    flow."StateName" AS "FlowState",
+    flow."Remark",
+    flow."CreationTimeString" AS "FlowTime"
+  FROM 
+    "${SCHEMA}"."matcha.messages" AS msg
+  INNER JOIN 
+    "${SCHEMA}"."matcha.message_logs" AS log ON msg."ID" = log."MessageID"
+  INNER JOIN 
+    "${SCHEMA}"."matcha.events" AS eve ON msg."ID" = eve."MessageID"
+  LEFT JOIN 
+    "${SCHEMA}"."matcha.subscriptions" AS sub ON msg."ID" = sub."MessageID"
+  LEFT JOIN 
+    "${SCHEMA}"."matcha.flows" AS flow ON sub."ID" = flow."SubscriptionID"
+  WHERE
+    msg."MessageType"='Event'

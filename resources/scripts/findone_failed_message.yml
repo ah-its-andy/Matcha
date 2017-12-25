@@ -1,0 +1,66 @@
+name: FindOneFailedMessage
+
+script:
+    SELECT
+	    msg."ID", 
+      msg."MessageType", 
+      msg."Content", 
+      msg."State", 
+      msg."StateName", 
+      msg."Retry", 
+      msg."CreationTime", 
+      msg."CreationTimeString", 
+      msg."Publisher", 
+      msg."PublishTime", 
+      msg."PublishTimeString", 
+      msg."Env"
+    FROM
+	    "${SCHEMA}"."matcha.messages" AS msg
+	  INNER JOIN (
+      SELECT
+	      innerSub."ID",
+	      innerSub."MessageID",
+	      innerFlow."StateName",
+	      innerFlow."CreationTime" AS "LastMotifyTime",
+	      innerFlow."CreationTimeString" AS "LastMotifyTimeString" 
+      FROM
+	      "${SCHEMA}"."matcha.subscriptions" AS innerSub
+	    INNER JOIN 
+        "${SCHEMA}"."matcha.flows" AS innerFlow ON innerSub."ID" = innerFlow."SubscriptionID" 
+      WHERE
+	      innerFlow."CreationTime" = (
+          SELECT
+	          inner1."CreationTime" 
+          FROM ( 
+              SELECT 
+                subInner1."SubscriptionID", MAX(subInner1."CreationTime") AS "CreationTime" 
+              FROM 
+                "${SCHEMA}"."matcha.flows" AS subInner1 
+              GROUP BY subInner1."SubscriptionID" 
+            ) AS inner1 
+          WHERE
+	          inner1."SubscriptionID" = innerSub."ID" 
+	        ) 
+	    ) AS sub ON msg."ID" = sub."MessageID" 
+    WHERE
+      msg."MessageType"= 'Event'
+	    AND msg."State" = 2
+      AND msg."CreationTime" <= $1
+	    AND ( 
+        sub."StateName" = 'Failed' 
+        OR ( 
+          sub."StateName" <> 'Succeeded' 
+          AND sub."StateName" <> 'Failed' 
+          AND sub."LastMotifyTime" <= $1 
+        ) 
+        OR ( 
+          SELECT 
+            COUNT ( * ) 
+          FROM 
+            "${SCHEMA}"."matcha.subscriptions" AS sub2 
+          WHERE 
+            sub2."MessageID" = msg."ID" 
+        ) = 0
+      )
+	  LIMIT 1
+	  FOR UPDATE SKIP LOCKED;

@@ -1,0 +1,13 @@
+name: FindOneEvent
+
+script:
+  SELECT
+	  "ID",
+	  "MessageID",
+	  "Exchange",
+	  "RouteKey",
+	  "Queue" 
+  FROM
+	  "${SCHEMA}"."matcha.events"
+  WHERE 
+    "MessageID"=$1

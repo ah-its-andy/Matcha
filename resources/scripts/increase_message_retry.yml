@@ -1,0 +1,11 @@
+name: IncreaseMessageRetry
+
+script:
+  UPDATE 
+    "${SCHEMA}"."matcha.messages" 
+  SET 
+    "Retry" = "Retry" + 1
+  WHERE 
+    "ID" = $1
+  RETURNING 
+    "Retry";

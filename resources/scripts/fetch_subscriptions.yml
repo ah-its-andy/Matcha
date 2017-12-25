@@ -1,0 +1,18 @@
+name: FetchSubscriptions
+
+script:
+  SELECT
+    "ID", 
+    "MessageID", 
+    "ReceiverTag", 
+    "Exchange", 
+    "RouteKey",
+    "StateName",
+    "LastMotifyTime",
+    "LastMotifyTimeString"
+  FROM 
+    "${SCHEMA}"."matcha.subscriptions"
+  WHERE
+    "${SCHEMA}"."matcha.subscriptions"."MessageID"=$1
+  ORDER BY
+    "${SCHEMA}"."matcha.subscriptions"."ReceiverTag" ASC

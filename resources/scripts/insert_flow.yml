@@ -1,0 +1,18 @@
+name: InsertFlow
+
+script:
+  INSERT INTO "${SCHEMA}"."matcha.flows"(
+    "ID", 
+    "SubscriptionID", 
+    "StateName", 
+    "Remark", 
+    "CreationTime", 
+    "CreationTimeString"
+  ) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6
+  );

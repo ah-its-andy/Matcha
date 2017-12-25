@@ -1,0 +1,22 @@
+name: InsertMessageLog
+
+script: 
+  INSERT INTO "${SCHEMA}"."matcha.message_logs"(
+    "ID", 
+    "MessageID", 
+    "OrignalState", 
+    "OrignalStateName", 
+    "State", 
+    "StateName", 
+    "CreationTime", 
+    "CreationTimeString"
+  ) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6,
+    $7,
+    $8  
+  );

@@ -1,0 +1,41 @@
+name: FindOneSucceedMessage
+
+script:
+  SELECT
+	    msg."ID", 
+      msg."MessageType", 
+      msg."Content", 
+      msg."State", 
+      msg."StateName", 
+      msg."Retry", 
+      msg."CreationTime", 
+      msg."CreationTimeString", 
+      msg."Publisher", 
+      msg."PublishTime", 
+      msg."PublishTimeString", 
+      msg."Env"
+    FROM
+	    "${SCHEMA}"."matcha.messages" AS msg 
+    WHERE
+	    ( 
+        SELECT 
+          COUNT ( * ) 
+        FROM 
+          "${SCHEMA}"."matcha.subscriptions" AS sub 
+        WHERE 
+          sub."MessageID" = msg."ID" 
+          AND sub."StateName" <> 'Succeeded' 
+      ) = 0
+      AND ( 
+        SELECT 
+          COUNT ( * ) 
+        FROM 
+          "${SCHEMA}"."matcha.subscriptions" AS sub2 
+        WHERE 
+          sub2."MessageID" = msg."ID" 
+      ) > 0
+      AND "CreationTime" <= $1
+      AND "State"=2
+      AND "MessageType" = 'Event'
+    LIMIT 1
+    FOR UPDATE SKIP LOCKED;

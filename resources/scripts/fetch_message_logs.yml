@@ -1,0 +1,18 @@
+name: FetchMessageLogs
+
+script:
+  SELECT 
+    "ID", 
+    "MessageID", 
+    "OrignalState", 
+    "OrignalStateName", 
+    "State", 
+    "StateName", 
+    "CreationTime", 
+    "CreationTimeString"
+  FROM
+    "${SCHEMA}"."matcha.message_logs"
+  WHERE
+    "${SCHEMA}"."matcha.message_logs"."MessageID"=$1
+  ORDER BY
+    "${SCHEMA}"."matcha.message_logs"."CreationTime" ASC
